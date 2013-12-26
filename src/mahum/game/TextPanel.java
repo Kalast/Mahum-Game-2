@@ -86,4 +86,8 @@ public class TextPanel {
         }
         g.setColor(c);
     }
+
+    public void clear() {
+        this.lines.clear();
+    }
 }

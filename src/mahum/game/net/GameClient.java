@@ -28,23 +28,20 @@ public class GameClient extends Client{
         Kryo kryo = this.getKryo();
         kryo.register(SomeRequest.class);
         kryo.register(SomeResponse.class);
-        this.addListener(new Listener() {
-            public void received(Connection connection, Object object) {
-                if (object instanceof SomeResponse) {
-                    SomeResponse response = (SomeResponse) object;
-                    System.out.println(response.text);
-                    GameState.panel.addText(response.text);
-                }
-            }
-        });
         this.start();
+    }
+    
+    public boolean connect(String address, int portTCP, int portUDP){
         try {
-            this.connect(5000, "localhost", 6900, 6901);
+            this.connect(5000, address, portTCP, portUDP);
             SomeRequest request = new SomeRequest();
             request.text = "Client : Je t'envoie une requête !";
             this.sendTCP(request);
+            return true;
         } catch (IOException ex) {
             Logger.getLogger(GameServeur.class.getName()).log(Level.SEVERE, null, ex);
         }   
+        
+        return false;
     }
 }

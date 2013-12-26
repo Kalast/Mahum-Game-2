@@ -110,7 +110,7 @@ public class EventManager {
         
         final float testSpeed = 0.3f;
         //cube.getBody().setLinearDamping(0.5f);
-        /*container.getInput().addKeyListener(new KeyListener() {
+        container.getInput().addKeyListener(new KeyListener() {
 
             @Override
             public void keyPressed(int key, char c) {
@@ -120,7 +120,7 @@ public class EventManager {
                     client.sendTCP(request);
                 }
                 
-                if(key == Input.KEY_D){
+                /*if(key == Input.KEY_D){
                     cube.getBody().applyForceToCenter(new Vec2(testSpeed,0));
                     if(cube.getBody().getLinearVelocity().x > testSpeed){
                         cube.getBody().setLinearVelocity(new Vec2(testSpeed,cube.getBody().getLinearVelocity().y));
@@ -146,7 +146,7 @@ public class EventManager {
                     if(cube.getBody().getLinearVelocity().y > testSpeed){
                         cube.getBody().setLinearVelocity(new Vec2(cube.getBody().getLinearVelocity().x,testSpeed));
                     }
-                }
+                }*/
             }
 
             @Override
@@ -171,6 +171,6 @@ public class EventManager {
             @Override
             public void inputStarted() {
             }
-        });*/
+        });
     }
 }

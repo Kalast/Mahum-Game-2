@@ -8,6 +8,7 @@ package mahum.game.states;
 
 import com.esotericsoftware.kryonet.Client;
 import java.net.InetAddress;
+import mahum.game.net.GameClient;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -57,10 +58,13 @@ public class SearchServerState extends BasicGameState{
 
                 @Override
                 public void run() {
-                    Client c = new Client();
+                    GameClient c = new GameClient();
                     InetAddress address = c.discoverHost(6901, 5000);
                     if(address != null){
-                        game.enterState(GameState.ID);
+                        if(c.connect(address.getHostAddress(), 6900, 6901)){
+                            ((mahum.game.states.GameState)game.getState(GameState.ID)).setClient(c);
+                            game.enterState(GameState.ID);
+                        }
                     }
                 }
             }).start();

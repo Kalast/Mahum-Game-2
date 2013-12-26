@@ -20,6 +20,7 @@ import mahum.game.Floor;
 import mahum.game.HillPiece;
 import mahum.game.JaugePuissance;
 import mahum.game.PunchingBall;
+import mahum.game.SomeResponse;
 import mahum.game.TextPanel;
 import mahum.game.Variables;
 import mahum.game.Wall;
@@ -145,6 +146,10 @@ public class GameState extends BasicGameState{
         };
     }
 
+    public void setClient(GameClient client) {
+        this.client = client;
+    }
+
     @Override
     public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
         box.create(world);
@@ -153,8 +158,6 @@ public class GameState extends BasicGameState{
         hill.create(world);
         
         panel = new TextPanel(container, new Rectangle(0, 300, 500, 300));
-        
-        client = new GameClient();
         client.addListener(new Listener(){
 
             @Override
@@ -164,7 +167,16 @@ public class GameState extends BasicGameState{
 
             @Override
             public void connected(Connection connection) {
-                
+                panel.addText("Vous êtes connecté !");
+            }
+            
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof SomeResponse) {
+                    SomeResponse response = (SomeResponse) object;
+                    System.out.println(response.text);
+                    panel.addText(response.text);
+                }
             }
             
         });

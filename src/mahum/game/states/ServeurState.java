@@ -31,6 +31,7 @@ public class ServeurState extends BasicGameState{
     private TextPanel panel;
     private GameServeur serveur;
     private ActionButton startServBtn;
+    private ActionButton clearLogs;
     
     @Override
     public int getID() {
@@ -39,7 +40,15 @@ public class ServeurState extends BasicGameState{
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        startServBtn = new ActionButton(container, "start_btn", 300, 25);
+        startServBtn = new ActionButton(container, "start_btn", 180, 25);
+        clearLogs = new ActionButton(container, "clear_btn", 420, 25);
+        clearLogs.setActionPerform(new ActionPerform() {
+
+            @Override
+            public void perform() {
+                panel.clear();
+            }
+        });
         panel = new TextPanel(container, new Rectangle(100,100,600,400));
         startServBtn.setActionPerform(new ActionPerform() {
 
@@ -86,6 +95,7 @@ public class ServeurState extends BasicGameState{
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         startServBtn.render(container, g);
+        this.clearLogs.render(container, g);
         panel.render(g);
     }
 
