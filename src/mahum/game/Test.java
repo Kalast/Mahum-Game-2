@@ -11,5 +11,5 @@ package mahum.game;
  * @author Kalast
  */
 public class Test {
-    
+    private int test;
 }
