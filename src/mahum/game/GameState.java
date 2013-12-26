@@ -86,85 +86,6 @@ public class GameState extends BasicGameState{
         punchingBall = new PunchingBall(600, 300, 2, 30);
         punchingBall2 = new PunchingBall(670, 300, 2, 30);
         
-        container.getInput().addMouseListener(new MouseListener() {
-
-            @Override
-            public void mouseWheelMoved(int change) {
-                System.out.println(change);
-                if(change > 0){
-                    Variables.ZOOM ++;
-                } else {
-                    Variables.ZOOM --;
-                }
-                
-            }
-
-            @Override
-            public void mouseClicked(int button, int x, int y, int clickCount) {
-                /*if(button == org.newdawn.slick.Input.MOUSE_RIGHT_BUTTON){
-                    floors.add(new Floor(x, y, 800, 20));
-                    floors.get(floors.size()-1).create(world);
-                }else{
-                    floors.add(new Floor(x, y, 800, -20));
-                    floors.get(floors.size()-1).create(world);
-                }*/
-            }
-
-            @Override
-            public void mousePressed(int button, int x, int y) {
-                balls.add(new Ball(10));
-                balls.get(balls.size()-1).create(world, x, y);
-                balls.get(balls.size()-1).stopMovement();
-                jauge.setStart(x, y);
-                jauge.setEnd(x, y);
-                jauge.setActive(true);
-            }
-
-            @Override
-            public void mouseReleased(int button, int x, int y) {
-                jauge.setActive(false);
-                balls.get(balls.size()-1).resetMovement();
-                balls.get(balls.size()-1).getBody().applyForceToCenter(jauge.getVector());
-                //car.resetMovement();
-            }
-
-            @Override
-            public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-                /*balls.add(new Ball(20));
-                balls.get(balls.size()-1).create(world, newx, newy);*/
-                      
-            }
-
-            @Override
-            public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-                //balls.get(balls.size()-1).setLocation(newx, newy);
-                jauge.setEnd(newx, newy);
-                /*car.stopMovement();
-                car.setLocation(newx, newy);*/
-            }
-
-            @Override
-            public void setInput(Input input) {
-               
-            }
-
-            @Override
-            public boolean isAcceptingInput() {
-                return true;
-            }
-
-            @Override
-            public void inputEnded() {
-                
-            }
-
-            @Override
-            public void inputStarted() {
-                
-            }
-        });
-        
-
         Vec2 gravity = new Vec2(0, 9.8f);
         world = new World(gravity);
         world.setAllowSleep(true);
@@ -218,6 +139,8 @@ public class GameState extends BasicGameState{
         //car.setLocation(50, 50);
         System.out.println(this.car.getPositionPhysics());
         //car.getBody().applyForceToCenter(new Vec2(5f,0));
+        
+        EventManager.addEvents(container, world, balls, jauge, car);
     }
 
     @Override
