@@ -45,7 +45,7 @@ public class HillPiece {
         for(int i = phase; i < nbRamp+phase; i ++){
             float y1 = (float)Math.round((height / 2 + height / 2*Math.cos(2*Math.PI/nbRamp*i)));
             float y2 = (float)Math.round((height / 2 + height / 2*Math.cos(2*Math.PI/nbRamp*(i+1))));
-            this.rampes.add(new Ramp(rampWidth, 768, y + y1, y + y2, x+rampWidth*(i-phase)));
+            this.rampes.add(new Ramp(rampWidth, Variables.HEIGHT_SCREEN, y + y1, y + y2, x+rampWidth*(i-phase)));
             this.rampes.get(i-phase).create(world);
         }
         
