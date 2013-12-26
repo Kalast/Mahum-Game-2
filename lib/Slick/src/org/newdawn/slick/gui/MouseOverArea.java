@@ -368,6 +368,7 @@ public class MouseOverArea extends AbstractComponent {
 	 * @see org.newdawn.slick.util.InputAdapter#mouseMoved(int, int, int, int)
 	 */
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+            System.out.println("test");
 		over = area.contains(newx, newy);
 	}
 	

@@ -6,8 +6,11 @@
 
 package mahum.game;
 
+import mahum.game.states.GameState;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mahum.gui.ConstraintAxisMovement;
+import mahum.gui.ConstraintMovement;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -33,33 +36,31 @@ import org.newdawn.slick.opengl.ImageData;
  */
 public class Scroller extends org.newdawn.slick.gui.AbstractComponent{
     private Rectangle zone;
-    private MouseOverArea cursor;
+    private SimpleButton cursor;
     private Color cursorColor = Color.gray;
 
-    public Scroller(Rectangle rect) {
-        super(GameState.container);
+    public Scroller(GUIContext context, Rectangle rect) {
+        super(context);
         this.zone = rect;
         try {
-            cursor = new MouseOverArea(this.container, new Image("images/scroll_uh.png"), 0, 0);
+            cursor = new SimpleButton(this.container, new Image("images/scroll_uh.png"), 0, 0);
             this.cursor.setLocation(this.zone.getX(), this.zone.getY());
+            
         } catch (SlickException ex) {
             Logger.getLogger(Scroller.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
-    private boolean isHover() {
-        return !(Mouse.getX() < this.cursor.getX() || Mouse.getX() >= this.cursor.getX() + this.cursor.getWidth()
-                || Mouse.getY() < this.cursor.getY() || Mouse.getY() >= this.cursor.getY() + this.cursor.getHeight());
-    }
-
     @Override
     public void render(GUIContext container, Graphics g) throws SlickException {
         Color c = g.getColor();
         g.setColor(new Color(255,255,255, 0.5f));
         g.fillRect(this.zone.getX(),this.zone.getY(),this.zone.getWidth(),this.zone.getHeight());
         g.setColor(cursorColor);
+        g.setClip(zone);
         this.cursor.render(container, g);
+        g.setClip(0, 0, Variables.WIDTH_SCREEN, Variables.HEIGHT_SCREEN);
         g.setColor(c);
     }
 

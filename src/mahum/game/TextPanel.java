@@ -6,13 +6,16 @@
 
 package mahum.game;
 
+import mahum.game.states.GameState;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.GUIContext;
 
 /**
  *
@@ -20,17 +23,17 @@ import org.newdawn.slick.geom.Rectangle;
  */
 public class TextPanel {
     private Rectangle zone;
-    private ArrayList<String> lines;
+    private CopyOnWriteArrayList<String> lines;
     private int padding;
     private int lineHeight;
     private Scroller scroller;
 
-    public TextPanel(Rectangle zone) {
+    public TextPanel(GUIContext context, Rectangle zone) {
         this.zone = zone;
-        this.lines = new ArrayList<>();
+        this.lines = new CopyOnWriteArrayList<>();
         this.padding = 5;
         this.lineHeight = 20;
-        this.scroller = new Scroller(new Rectangle(
+        this.scroller = new Scroller(context, new Rectangle(
                 zone.getX() + zone.getWidth() - 16,
                 zone.getY(),
                 16,
@@ -59,14 +62,16 @@ public class TextPanel {
         g.setColor(new Color(255,255,255));
         
         g.drawRect(this.zone.getX(),this.zone.getY(),this.zone.getWidth(),this.zone.getHeight());
+        g.setColor(new Color(0,0,255, 0.3f));
+        g.fillRect(this.zone.getX(),this.zone.getY(),this.zone.getWidth(),this.zone.getHeight());
+        g.setColor(new Color(255,255,255));
         g.setClip(
                 (int)(zone.getX() + padding),
                 (int)(zone.getY() + padding), 
-                (int)(zone.getWidth() - padding * 2),
+                (int)(zone.getWidth() - padding * 2 - this.scroller.getWidth()),
                 (int)(zone.getHeight() - padding * 2)
         );
-        
-        System.out.println(g.getClip());
+
         int i = 0;
         for(String line : lines){
             g.drawString(line, this.zone.getX() + this.padding, this.zone.getY() + this.padding + this.lineHeight * i);
@@ -80,6 +85,5 @@ public class TextPanel {
             Logger.getLogger(TextPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         g.setColor(c);
-        
     }
 }

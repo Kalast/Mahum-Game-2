@@ -6,9 +6,13 @@
 
 package mahum.game;
 
+import mahum.game.states.GameState;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mahum.game.states.SearchServerState;
+import mahum.game.states.ServeurState;
+import mahum.game.states.TitleState;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -31,7 +35,10 @@ public class SimpleSlickGame extends StateBasedGame {
     
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
+        this.addState(new TitleState());
+        this.addState(new ServeurState());
         this.addState(new GameState());
+        this.addState(new SearchServerState());
         this.enterState(1);
     }
 
@@ -43,8 +50,9 @@ public class SimpleSlickGame extends StateBasedGame {
             //container.setTargetFrameRate(60); // on règle le FrameRate 
             container.setVSync(true);
             //container.setFullscreen(true);
+            container.setUpdateOnlyWhenVisible(false);
+            container.setAlwaysRender(true);
             container.start(); //on démarre le container 
-           
         } 
         catch (SlickException e) {e.printStackTrace();
         } // l'exception de base de slick !!  

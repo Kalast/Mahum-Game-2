@@ -6,8 +6,10 @@
 
 package mahum.game;
 
+import mahum.game.net.GameServeur;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import mahum.game.net.GameClient;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.GameContainer;
@@ -28,7 +30,7 @@ public class EventManager {
         final CopyOnWriteArrayList<Ball> balls = (CopyOnWriteArrayList<Ball>) a[1];
         final JaugePuissance jauge = (JaugePuissance) a[2];
         final Cube cube = (Cube) a[3];
-        
+        final GameClient client = (GameClient) a[4];
         container.getInput().addMouseListener(new MouseListener() {
 
             @Override
@@ -107,15 +109,15 @@ public class EventManager {
         });
         
         final float testSpeed = 0.3f;
-        cube.getBody().setLinearDamping(0.5f);
-        container.getInput().addKeyListener(new KeyListener() {
+        //cube.getBody().setLinearDamping(0.5f);
+        /*container.getInput().addKeyListener(new KeyListener() {
 
             @Override
             public void keyPressed(int key, char c) {
                 if(key == Input.KEY_ENTER){
                     SomeRequest request = new SomeRequest();
                     request.text = "Client : J'appuie sur la touche ENTREE ! OUAAAAAAAAAAAAAAAAAAAAAAAAh !!";
-                    GameServeur.client.sendTCP(request);
+                    client.sendTCP(request);
                 }
                 
                 if(key == Input.KEY_D){
@@ -169,6 +171,6 @@ public class EventManager {
             @Override
             public void inputStarted() {
             }
-        });
+        });*/
     }
 }

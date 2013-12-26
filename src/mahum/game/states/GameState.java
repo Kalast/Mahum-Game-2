@@ -4,10 +4,26 @@
  * and open the template in the editor.
  */
 
-package mahum.game;
+package mahum.game.states;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import java.net.InetAddress;
+import mahum.game.net.GameServeur;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import mahum.game.Ball;
+import mahum.game.Box;
+import mahum.game.Car;
+import mahum.game.EventManager;
+import mahum.game.Floor;
+import mahum.game.HillPiece;
+import mahum.game.JaugePuissance;
+import mahum.game.PunchingBall;
+import mahum.game.TextPanel;
+import mahum.game.Variables;
+import mahum.game.Wall;
+import mahum.game.net.GameClient;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.AABB;
@@ -53,7 +69,7 @@ import org.newdawn.slick.state.StateBasedGame;
  * @author Kalast
  */
 public class GameState extends BasicGameState{
-    public static final int ID = 1; 
+    public static final int ID = 3; 
     public static GameContainer container; 
     private World world;
     private float av = 0;
@@ -62,6 +78,8 @@ public class GameState extends BasicGameState{
     public static TextPanel panel;
     private JaugePuissance jauge;
     private ArrayList<Floor> floors;
+    
+    private GameClient client;
     
     private PunchingBall punchingBall;
     private PunchingBall punchingBall2;
@@ -79,10 +97,13 @@ public class GameState extends BasicGameState{
         return ID;
     }
 
+    
+    
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        System.out.println("INIT GAMESTATE");
         GameState.container = container;
-        time = 0;
+        time = System.currentTimeMillis();
         balls = new CopyOnWriteArrayList();
         floors = new ArrayList();
         jauge = new JaugePuissance(3);
@@ -122,26 +143,32 @@ public class GameState extends BasicGameState{
                 
             }
         };
+    }
 
+    @Override
+    public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
         box.create(world);
         box2.create(world);
-        /*this.punchingBall.create(world);
-        this.punchingBall2.create(world);*/
-        car.create(world, 0, 0);
+        //car.create(world, 0, 0);
         hill.create(world);
-        /*punchingBall2.getPunching().getBody().setAngularVelocity(50);
-        punchingBall2.getPunching().getBody().setAngularDamping(0.2f);
-        punchingBall2.getPunching().getBody().setLinearDamping(0.2f);*/
-        //punchingBall.getPunching().getBody().setAngularVelocity(-10);
-        //punchingBall.getPunching().getBody().setAngularDamping(10f);
-        //punchingBall.getPunching().getBody().setLinearDamping(0.2f);
         
-        //car.setLocation(50, 50);
-        //car.getBody().applyForceToCenter(new Vec2(5f,0));
+        panel = new TextPanel(container, new Rectangle(0, 300, 500, 300));
         
-        EventManager.addEvents(container, world, balls, jauge, car);
-        panel = new TextPanel(new Rectangle(0, 300, 500, 300));
-        GameServeur serveur = new GameServeur();
+        client = new GameClient();
+        client.addListener(new Listener(){
+
+            @Override
+            public void disconnected(Connection connection) {
+                game.enterState(SearchServerState.ID);
+            }
+
+            @Override
+            public void connected(Connection connection) {
+                
+            }
+            
+        });
+        EventManager.addEvents(container, world, balls, jauge, car, client);
     }
 
     @Override
@@ -159,7 +186,7 @@ public class GameState extends BasicGameState{
         
         /*punchingBall.render(g);
         punchingBall2.render(g);*/
-        car.render(g);
+        //car.render(g);
         this.hill.render(g);
         this.jauge.render(g);
         panel.render(g);
@@ -167,12 +194,8 @@ public class GameState extends BasicGameState{
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        if(System.currentTimeMillis() - time >= 100){
-
-            time = System.currentTimeMillis();
-            
-        } 
-        world.step(delta / 1000f, 20, 3);
+        
+        world.step(delta / 1000f, 8, 3);
         autoClean();  
     }
     
