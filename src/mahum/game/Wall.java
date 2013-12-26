@@ -34,9 +34,7 @@ public class Wall {
     }
     
     public void render(Graphics g){
-        g.rotate(0, 0, (float) Math.toDegrees(this.body.getAngle()));
-        g.drawLine(x * Constants.SCALE_PHYSICS, y * Constants.SCALE_PHYSICS, x * Constants.SCALE_PHYSICS * Constants.SCALE_PHYSICS, y + height * Constants.SCALE_PHYSICS);
-        g.rotate(0, 0, -(float) Math.toDegrees(this.body.getAngle()));
+        g.drawLine(x * Constants.SCALE_PHYSICS, y * Constants.SCALE_PHYSICS, x * Constants.SCALE_PHYSICS, y * Constants.SCALE_PHYSICS + height * Constants.SCALE_PHYSICS);
     }
     
     public void create(World world){

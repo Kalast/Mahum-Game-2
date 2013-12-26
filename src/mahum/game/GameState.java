@@ -67,6 +67,7 @@ public class GameState extends BasicGameState{
     private long time;
     
     private Box box = new Box(0,0,1280,768);
+    private Box box2 = new Box(500,200,200,200);
     Car car = new Car(50,50);
     
     HillPiece hill = new HillPiece(1000,300,0,0,20);
@@ -201,6 +202,7 @@ public class GameState extends BasicGameState{
         };
 
         box.create(world);
+        box2.create(world);
         /*this.punchingBall.create(world);
         this.punchingBall2.create(world);*/
         car.create(world, 0, 0);
@@ -226,6 +228,7 @@ public class GameState extends BasicGameState{
             ball.render(g);
         }
         box.render(g);
+        box2.render(g);
         for(Floor floor : floors){
             floor.render(g);
         }

@@ -29,8 +29,8 @@ public class Box {
         
         this.bottom = new Floor(x, y + height, width);
         this.top = new Floor(x, y, width);
-        this.left = new Wall(x, y+1, height-2);
-        this.right = new Wall(x + width-1, y+1, height-2);
+        this.left = new Wall(x, y, height);
+        this.right = new Wall(x + width, y, height);
     }
     
     public void create(World world){
