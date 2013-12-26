@@ -67,12 +67,7 @@ public class Ramp {
         
         shape.set(edges, 4);
         
-        System.out.println("-------");
-        System.out.println("w = " + width_p);
-        System.out.println("x_p + width_p = " + (x_p + width_p));
-        System.out.println("-------");
-        Utils.display_array(shape.getVertices());
-        System.out.println("--------");
+        //Utils.display_array(shape.getVertices());
         BodyDef def = new BodyDef();
         def.type = BodyType.STATIC;
         def.position.set(x_p, this.yGround / Constants.SCALE_PHYSICS);

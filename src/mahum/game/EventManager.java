@@ -20,8 +20,10 @@ import org.newdawn.slick.MouseListener;
  * @author Kalast
  */
 public class EventManager {
+    public static Input input;
     
     public static void addEvents(GameContainer container, Object... a){
+        input = container.getInput();
         final World world = (World) a[0];
         final CopyOnWriteArrayList<Ball> balls = (CopyOnWriteArrayList<Ball>) a[1];
         final JaugePuissance jauge = (JaugePuissance) a[2];
@@ -31,7 +33,6 @@ public class EventManager {
 
             @Override
             public void mouseWheelMoved(int change) {
-                System.out.println(change);
                 if(change > 0){
                     Variables.ZOOM ++;
                 } else {
@@ -111,6 +112,12 @@ public class EventManager {
 
             @Override
             public void keyPressed(int key, char c) {
+                if(key == Input.KEY_ENTER){
+                    SomeRequest request = new SomeRequest();
+                    request.text = "Client : J'appuie sur la touche ENTREE ! OUAAAAAAAAAAAAAAAAAAAAAAAAh !!";
+                    GameServeur.client.sendTCP(request);
+                }
+                
                 if(key == Input.KEY_D){
                     cube.getBody().applyForceToCenter(new Vec2(testSpeed,0));
                     if(cube.getBody().getLinearVelocity().x > testSpeed){

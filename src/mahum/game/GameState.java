@@ -44,6 +44,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -53,11 +54,12 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameState extends BasicGameState{
     public static final int ID = 1; 
+    public static GameContainer container; 
     private World world;
     private float av = 0;
     private Wall wall;
     private CopyOnWriteArrayList<Ball> balls;
-    
+    public static TextPanel panel;
     private JaugePuissance jauge;
     private ArrayList<Floor> floors;
     
@@ -79,6 +81,7 @@ public class GameState extends BasicGameState{
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        GameState.container = container;
         time = 0;
         balls = new CopyOnWriteArrayList();
         floors = new ArrayList();
@@ -99,8 +102,6 @@ public class GameState extends BasicGameState{
                      ((Ball)contact.m_fixtureB.getBody().getUserData()).setColor(Color.green);
                     
                 }
-                
-                System.out.println(contact.getManifold().localPoint);
             }
 
             @Override
@@ -127,7 +128,6 @@ public class GameState extends BasicGameState{
         /*this.punchingBall.create(world);
         this.punchingBall2.create(world);*/
         car.create(world, 0, 0);
-        System.out.println("c=" + car.getPositionPhysics());
         hill.create(world);
         /*punchingBall2.getPunching().getBody().setAngularVelocity(50);
         punchingBall2.getPunching().getBody().setAngularDamping(0.2f);
@@ -137,10 +137,11 @@ public class GameState extends BasicGameState{
         //punchingBall.getPunching().getBody().setLinearDamping(0.2f);
         
         //car.setLocation(50, 50);
-        System.out.println(this.car.getPositionPhysics());
         //car.getBody().applyForceToCenter(new Vec2(5f,0));
         
         EventManager.addEvents(container, world, balls, jauge, car);
+        panel = new TextPanel(new Rectangle(0, 300, 500, 300));
+        GameServeur serveur = new GameServeur();
     }
 
     @Override
@@ -161,7 +162,7 @@ public class GameState extends BasicGameState{
         car.render(g);
         this.hill.render(g);
         this.jauge.render(g);
-
+        panel.render(g);
     }
 
     @Override

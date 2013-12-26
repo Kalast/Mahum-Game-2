@@ -61,7 +61,6 @@ public class Cube {
         g.drawString(this.getPositionPhysics()+"", getPositionPhysics().x * Constants.SCALE_PHYSICS+height+3, getPositionPhysics().y * Constants.SCALE_PHYSICS+15);   
 
         g.rotate(getPositionPhysics().x * Constants.SCALE_PHYSICS, getPositionPhysics().y * Constants.SCALE_PHYSICS, (float) Math.toDegrees(this.body.getAngle()));
-        //System.out.println(new Vec2(body.getPosition().x * Constants.SCALE_PHYSICS, body.getPosition().y * Constants.SCALE_PHYSICS));
         g.drawLine(getPositionPhysics().x * Constants.SCALE_PHYSICS - width / 2, getPositionPhysics().y * Constants.SCALE_PHYSICS - height / 2, getPositionPhysics().x * Constants.SCALE_PHYSICS + width / 2, getPositionPhysics().y * Constants.SCALE_PHYSICS + height / 2);
         g.drawLine(getPositionPhysics().x * Constants.SCALE_PHYSICS - width / 2, getPositionPhysics().y * Constants.SCALE_PHYSICS + height / 2, getPositionPhysics().x * Constants.SCALE_PHYSICS + width / 2, getPositionPhysics().y * Constants.SCALE_PHYSICS - height / 2);
 
@@ -118,13 +117,8 @@ public class Cube {
         for(int i = 0; i < p.getPointCount(); i++){
             edges[i] = new Vec2(p.getPoint(i)[0] / Constants.SCALE_PHYSICS, p.getPoint(i)[1] / Constants.SCALE_PHYSICS);
         }
-        System.out.println("---- MC");
-        System.out.println(p.getPoint(3)[0] - p.getPoint(0)[0]);
-        System.out.println(p.getPoint(1)[1] - p.getPoint(0)[1]);
-        System.out.println(p.getPoint(2)[1] - p.getPoint(3)[1]);
-        System.out.println(p.getPoint(2)[0] - p.getPoint(1)[0]);
         ps.set(edges, 4);
-        Utils.display_array(ps.getVertices());
+        //Utils.display_array(ps.getVertices());
         FixtureDef fd = new FixtureDef();
         fd.shape = ps;
         fd.density = 0.8f;
@@ -133,12 +127,9 @@ public class Cube {
         body.createFixture(fd);
         //body.setGravityScale(0.5f);
         body.setUserData(this);
-        
-        System.out.println("Location = " + p.getLocation());
     }
     
     public void setLocation(float x, float y){
-        System.out.println();
         this.body.setTransform(new Vec2(x / Constants.SCALE_PHYSICS, y / Constants.SCALE_PHYSICS), 0);
     }
     

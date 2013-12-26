@@ -39,7 +39,7 @@ public class Server implements EndPoint {
 	private volatile boolean shutdown;
 	private Object updateLock = new Object();
 	private Thread updateThread;
-	private ServerDiscoveryHandler discoveryHandler;
+	private ByteBuffer emptyBuffer = ByteBuffer.allocate(0);
 
 	private Listener dispatchListener = new Listener() {
 		public void connected (Connection connection) {
@@ -96,18 +96,12 @@ public class Server implements EndPoint {
 		this.objectBufferSize = objectBufferSize;
 
 		this.serialization = serialization;
-		
-		this.discoveryHandler = ServerDiscoveryHandler.DEFAULT;
 
 		try {
 			selector = Selector.open();
 		} catch (IOException ex) {
 			throw new RuntimeException("Error opening selector.", ex);
 		}
-	}
-	
-	public void setDiscoveryHandler(ServerDiscoveryHandler newDiscoveryHandler) {
-		discoveryHandler = newDiscoveryHandler;
 	}
 
 	public Serialization getSerialization () {
@@ -187,7 +181,6 @@ public class Server implements EndPoint {
 				UdpConnection udp = this.udp;
 				outer:
 				for (Iterator<SelectionKey> iter = keys.iterator(); iter.hasNext();) {
-					keepAlive();
 					SelectionKey selectionKey = iter.next();
 					iter.remove();
 					Connection fromConnection = (Connection)selectionKey.attachment();
@@ -311,8 +304,8 @@ public class Server implements EndPoint {
 							}
 							if (object instanceof DiscoverHost) {
 								try {
-									boolean responseSent = discoveryHandler.onDiscoverHost(udp, fromAddress, serialization);
-									if (DEBUG && responseSent) debug("kryonet", "Responded to host discovery from: " + fromAddress);
+									udp.datagramChannel.send(emptyBuffer, fromAddress);
+									if (DEBUG) debug("kryonet", "Responded to host discovery from: " + fromAddress);
 								} catch (IOException ex) {
 									if (WARN) warn("kryonet", "Error replying to host discovery from: " + fromAddress, ex);
 								}
@@ -352,15 +345,6 @@ public class Server implements EndPoint {
 				if (connection.tcp.needsKeepAlive(time)) connection.sendTCP(FrameworkMessage.keepAlive);
 			}
 			if (connection.isIdle()) connection.notifyIdle();
-		}
-	}
-
-	private void keepAlive () {
-		long time = System.currentTimeMillis();
-		Connection[] connections = this.connections;
-		for (int i = 0, n = connections.length; i < n; i++) {
-			Connection connection = connections[i];
-			if (connection.tcp.needsKeepAlive(time)) connection.sendTCP(FrameworkMessage.keepAlive);
 		}
 	}
 

@@ -25,9 +25,4 @@ public class Utils {
         
         return ps;
     }
-    
-    public float[] getSplineValues(float number, int precision){
-        Spline s;
-        return null;
-    }
 }
