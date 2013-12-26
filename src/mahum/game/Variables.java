@@ -12,4 +12,7 @@ package mahum.game;
  */
 public class Variables {
     public static float ZOOM = 1;
+    
+    public final static int WIDTH_SCREEN = 800;
+    public final static int HEIGHT_SCREEN = 600;
 }

@@ -66,11 +66,11 @@ public class GameState extends BasicGameState{
     
     private long time;
     
-    private Box box = new Box(0,0,1280,768);
+    private Box box = new Box(0,0,800,600);
     private Box box2 = new Box(500,200,200,200);
     Car car = new Car(50,50);
     
-    HillPiece hill = new HillPiece(1000,300,0,0,20);
+    HillPiece hill = new HillPiece(800,300,100,0,20);
     
     @Override
     public int getID() {

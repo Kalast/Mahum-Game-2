@@ -39,7 +39,7 @@ public class SimpleSlickGame extends StateBasedGame {
         try
         { 
             AppGameContainer container = new AppGameContainer(new SimpleSlickGame()); 
-            container.setDisplayMode(1280, 768, false); // fenêtre de 1280*768 fullscreen =false !! 
+            container.setDisplayMode(800, 600, false); // fenêtre de 1280*768 fullscreen =false !! 
             //container.setTargetFrameRate(60); // on règle le FrameRate 
             container.setVSync(true);
             //container.setFullscreen(true);

@@ -12,4 +12,5 @@ package mahum.game;
  */
 public class Constants {
     public final static float SCALE_PHYSICS = 100f;
+    
 }
