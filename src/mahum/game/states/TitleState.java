@@ -8,10 +8,13 @@ package mahum.game.states;
 
 import mahum.gui.ActionButton;
 import mahum.gui.ActionPerform;
+import mahum.gui.List;
+import mahum.gui.ListItem;
 import mahum.gui.TextField;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -25,7 +28,7 @@ public class TitleState extends BasicGameState{
     private ActionButton serveurBtn;
     private ActionButton clientBtn;
     
-    
+    private List list;
 
     @Override
     public int getID() {
@@ -34,7 +37,23 @@ public class TitleState extends BasicGameState{
 
     @Override
     public void init(GameContainer container, final StateBasedGame game) throws SlickException {
-        
+        list = new List(container, new Rectangle(500,300,250,250));
+        list.setBorderRadius(4);
+        ListItem item = new ListItem("Quitter le jeu", container);
+        item.setAction(new ActionPerform() {
+
+            @Override
+            public void perform() {
+                System.exit(0);
+            }
+        });
+        list.addItem(item, 0);
+        list.addItem(new ListItem("Test2", container), 1);
+        list.addItem(new ListItem("Test3", container), 2);
+        list.addItem(new ListItem("Test3", container), 2);
+        list.addItem(new ListItem("Test3", container), 2);
+        list.addItem(new ListItem("Test3", container), 2);
+        list.addItem(new ListItem("Test3", container), 2);
     }
 
     @Override
@@ -73,6 +92,7 @@ public class TitleState extends BasicGameState{
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         this.serveurBtn.render(container, g);
         this.clientBtn.render(container, g);
+        this.list.render(container, g);
     }
 
     @Override

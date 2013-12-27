@@ -6,7 +6,6 @@
 
 package mahum.gui;
 
-import mahum.game.Variables;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -18,28 +17,28 @@ import org.newdawn.slick.gui.GUIContext;
  *
  * @author Kalast
  */
-public abstract class Container extends AbstractComponent{
+public abstract class Component extends AbstractComponent{
     protected Rectangle zone;
     protected int padding;
     protected boolean visible;
     protected ActionPerform action;
     private boolean hovered;
-    protected int borderRadius;
     
     protected boolean opaque;
     protected Color background;
     protected Color foreground;
+    protected int borderRadius;
     
-    public Container(GUIContext container, Rectangle zone) {
+    public Component(GUIContext container, Rectangle zone) {
         super(container);
         this.zone = zone;
         this.padding = 0;
         this.visible = true;
         this.hovered = false;
         this.opaque = true;
-        this.borderRadius = 0;
         this.background = Color.lightGray;
         this.foreground = Color.black;
+        this.borderRadius = 0;
         action = new ActionPerform() {
             @Override
             public void perform() {}
@@ -53,6 +52,14 @@ public abstract class Container extends AbstractComponent{
 
     public void setBorderRadius(int borderRadius) {
         this.borderRadius = borderRadius;
+    }
+    
+    public Rectangle getBounds(){
+        return this.zone;
+    }
+    
+    public Rectangle setBounds(){
+        return this.zone;
     }
     
     public void setAction(ActionPerform action) {

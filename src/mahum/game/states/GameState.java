@@ -147,8 +147,6 @@ public class GameState extends BasicGameState{
                 
             }
         };
-        
-        field = new TextField(container);
     }
 
     public void setClient(GameClient client) {
@@ -157,6 +155,7 @@ public class GameState extends BasicGameState{
     
     @Override
     public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
+        field = new TextField(container);
         box.create(world);
         box2.create(world);
         //car.create(world, 0, 0);
