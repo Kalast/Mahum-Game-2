@@ -51,8 +51,11 @@ public class SimpleSlickGame extends StateBasedGame {
             container.setVSync(true);
             //container.setFullscreen(true);
             container.setUpdateOnlyWhenVisible(false);
+            container.setVerbose(true);
             container.setAlwaysRender(true);
+            //container.getInput().enableKeyRepeat();
             container.start(); //on démarre le container 
+            
         } 
         catch (SlickException e) {e.printStackTrace();
         } // l'exception de base de slick !!  

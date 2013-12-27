@@ -8,6 +8,7 @@ package mahum.game.states;
 
 import mahum.gui.ActionButton;
 import mahum.gui.ActionPerform;
+import mahum.gui.TextField;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -23,6 +24,8 @@ public class TitleState extends BasicGameState{
     
     private ActionButton serveurBtn;
     private ActionButton clientBtn;
+    
+    
 
     @Override
     public int getID() {
@@ -39,6 +42,7 @@ public class TitleState extends BasicGameState{
         this.serveurBtn = new ActionButton(container, "serveur_btn", 300, 200);
         this.clientBtn = new ActionButton(container, "client_btn", 300, 400);
         
+        container.getInput().enableKeyRepeat();
         this.serveurBtn.setActionPerform(new ActionPerform() {
             @Override
             public void perform() {

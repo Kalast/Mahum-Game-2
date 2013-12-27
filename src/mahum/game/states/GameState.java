@@ -25,6 +25,8 @@ import mahum.game.TextPanel;
 import mahum.game.Variables;
 import mahum.game.Wall;
 import mahum.game.net.GameClient;
+import mahum.gui.ActionPerform;
+import mahum.gui.TextField;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.AABB;
@@ -90,7 +92,7 @@ public class GameState extends BasicGameState{
     private Box box = new Box(0,0,800,600);
     private Box box2 = new Box(500,200,200,200);
     Car car = new Car(50,50);
-    
+    private TextField field;
     HillPiece hill = new HillPiece(700,300,100,0,20);
     
     @Override
@@ -144,19 +146,28 @@ public class GameState extends BasicGameState{
                 
             }
         };
+        
+        field = new TextField(container);
     }
 
     public void setClient(GameClient client) {
         this.client = client;
     }
-
+    
     @Override
     public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
         box.create(world);
         box2.create(world);
         //car.create(world, 0, 0);
         hill.create(world);
-        
+        this.field.setLocation(0, 500);
+        this.field.setAction(new ActionPerform() {
+
+            @Override
+            public void perform() {
+                field.clearText();
+            }
+        });
         panel = new TextPanel(container, new Rectangle(0, 300, 500, 300));
         client.addListener(new Listener(){
 
@@ -202,6 +213,7 @@ public class GameState extends BasicGameState{
         this.hill.render(g);
         this.jauge.render(g);
         panel.render(g);
+        field.render(container, g);
     }
 
     @Override
