@@ -53,6 +53,7 @@ public class SimpleSlickGame extends StateBasedGame {
             container.setUpdateOnlyWhenVisible(false);
             container.setVerbose(true);
             container.setAlwaysRender(true);
+            
             //container.getInput().enableKeyRepeat();
             container.start(); //on démarre le container 
             

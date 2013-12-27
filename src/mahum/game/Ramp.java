@@ -91,6 +91,7 @@ public class Ramp {
         //g.drawLine(this.body.getPosition().x * Constants.SCALE_PHYSICS - width / 2, this.body.getPosition().y * Constants.SCALE_PHYSICS, this.body.getPosition().x * Constants.SCALE_PHYSICS + width / 2, this.body.getPosition().y * Constants.SCALE_PHYSICS / 2);
         g.setColor(Color.blue);
         g.fill(p);
+       
         g.setColor(Color.red);
         g.draw(p);
         g.setColor(Color.blue);

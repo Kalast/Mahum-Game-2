@@ -30,20 +30,16 @@ public class TextCursor {
     private int linePixelposition;
     private long time;
     private boolean visible;
+    private boolean returnAllowed;
     
     private int movedCharToRight;
     private int movedCharToLeft;
     private boolean active;
 
     public TextCursor() {
-        this.position = 0;
-        this.atStart = true;
-        this.atEnd = false;
-        this.linePixelposition = 0;
-        this.visible = true;
-        this.movedCharToRight = 0;
-        this.movedCharToLeft = 0;
         this.active = false;
+        this.returnAllowed = false;
+        reset();
     }
     
     public void attachTo(TextComponent parent){
@@ -72,6 +68,9 @@ public class TextCursor {
         this.visible = true;
         this.movedCharToRight = 0;
         this.movedCharToLeft = 0;
+        if(parent != null){
+            this.parent.setTextLocation(0, 0);
+        }
     }
     
     public void moveTo(int position){
@@ -237,7 +236,7 @@ public class TextCursor {
                 time = System.currentTimeMillis();
             }
             if(this.visible){
-                g.setColor(Color.white);
+                g.setColor(Color.black);
                 g.fillRect(parent.getX()+this.parent.getPadding()+linePixelposition, parent.getY()+this.parent.getPadding(), 2, this.parent.getGUI().getDefaultFont().getLineHeight());
             }
 

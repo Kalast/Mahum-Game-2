@@ -6,8 +6,12 @@
 
 package mahum.gui;
 
+
 import java.awt.FontMetrics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mahum.game.Variables;
+import org.lwjgl.input.Cursor;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -53,6 +57,28 @@ public class TextField extends TextComponent{
     }
 
     @Override
+    protected void mouseLeave() {
+        this.container.setDefaultMouseCursor();
+        if(!this.hasFocus()){
+            this.background = Color.lightGray;
+        }
+    }
+
+    @Override
+    protected void mouseEnter() {
+        try {
+            this.container.setMouseCursor("images/cursors/text.png", 7, 12);
+            if(!this.hasFocus()){
+                this.background = new Color(255,255,255,0.4f);
+            }
+        } catch (SlickException ex) {
+            Logger.getLogger(TextField.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+
+    @Override
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c); //To change body of generated methods, choose Tools | Templates.
     }
@@ -87,11 +113,13 @@ public class TextField extends TextComponent{
     @Override
     protected void gainFocus() {
         this.cursor.setActive(true);
+        this.background = new Color(0,255,0,0.4f);
     }
 
     @Override
     protected void lostFocus() {
         this.cursor.setActive(false);
+        this.background = Color.lightGray;
     }
 
 }

@@ -40,11 +40,11 @@ public abstract class TextComponent extends Container{
     @Override
     public void render(GUIContext container, Graphics g) throws SlickException {
         super.render(container, g); //To change body of generated methods, choose Tools | Templates.
-        g.setColor(Color.white);
+        g.setColor(this.foreground);
         g.setClip(new Rectangle(this.zone.getX()+this.padding, this.zone.getY()+this.padding, this.zone.getWidth()-this.padding*2+1, this.zone.getHeight()-this.padding*2+1));
         g.drawString(this.text.toString(), this.zone.getX() + this.getPadding() + this.XPosText, this.zone.getY() + this.getPadding() + this.YPosText);
         this.cursor.render(g);
-        g.setClip(0,0,Variables.WIDTH_SCREEN, Variables.HEIGHT_SCREEN);
+        g.clearClip();
     }
 
     public StringBuffer getText() {
