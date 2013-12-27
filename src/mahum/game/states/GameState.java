@@ -20,6 +20,7 @@ import mahum.game.Floor;
 import mahum.game.HillPiece;
 import mahum.game.JaugePuissance;
 import mahum.game.PunchingBall;
+import mahum.game.SomeRequest;
 import mahum.game.SomeResponse;
 import mahum.game.TextPanel;
 import mahum.game.Variables;
@@ -165,6 +166,9 @@ public class GameState extends BasicGameState{
 
             @Override
             public void perform() {
+                SomeRequest request = new SomeRequest();
+                request.text = field.getText().toString();
+                client.sendTCP(request);
                 field.clearText();
             }
         });
