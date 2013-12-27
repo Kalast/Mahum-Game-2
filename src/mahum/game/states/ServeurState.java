@@ -8,8 +8,8 @@ package mahum.game.states;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import mahum.game.SomeRequest;
-import mahum.game.SomeResponse;
+import mahum.game.net.SomeRequest;
+import mahum.game.net.SomeResponse;
 import mahum.game.TextPanel;
 import mahum.game.net.GameServeur;
 import mahum.gui.ActionButton;
@@ -83,6 +83,7 @@ public class ServeurState extends BasicGameState{
 
                             @Override
                             public void connected(Connection connection) {
+                                connection.sendTCP(serveur.getTickRequest());
                                 panel.addText(connection.getID() + " s'est connecté ..");
                             }
                          });
@@ -101,7 +102,9 @@ public class ServeurState extends BasicGameState{
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-    
+        if(this.serveur != null){
+            this.serveur.majTick(delta);
+        }
     }
     
 }

@@ -11,12 +11,15 @@ import mahum.gui.ActionPerform;
 import mahum.gui.List;
 import mahum.gui.ListItem;
 import mahum.gui.TextField;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 /**
  *
@@ -37,7 +40,8 @@ public class TitleState extends BasicGameState{
 
     @Override
     public void init(GameContainer container, final StateBasedGame game) throws SlickException {
-        list = new List(container, new Rectangle(500,300,250,250));
+        
+        /*list = new List(container, new Rectangle(500,300,250,250));
         list.setBorderRadius(4);
         ListItem item = new ListItem("Quitter le jeu", container);
         item.setAction(new ActionPerform() {
@@ -53,7 +57,7 @@ public class TitleState extends BasicGameState{
         list.addItem(new ListItem("Test3", container), 2);
         list.addItem(new ListItem("Test3", container), 2);
         list.addItem(new ListItem("Test3", container), 2);
-        list.addItem(new ListItem("Test3", container), 2);
+        list.addItem(new ListItem("Test3", container), 2);*/
     }
 
     @Override
@@ -65,7 +69,7 @@ public class TitleState extends BasicGameState{
         this.serveurBtn.setActionPerform(new ActionPerform() {
             @Override
             public void perform() {
-                game.enterState(ServeurState.ID);
+                game.enterState(ServeurState.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         });
         
@@ -83,6 +87,7 @@ public class TitleState extends BasicGameState{
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
         this.serveurBtn.setAcceptingInput(false);
         this.clientBtn.setAcceptingInput(false);
+        
         super.leave(container, game); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -92,7 +97,7 @@ public class TitleState extends BasicGameState{
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         this.serveurBtn.render(container, g);
         this.clientBtn.render(container, g);
-        this.list.render(container, g);
+        //this.list.render(container, g);
     }
 
     @Override

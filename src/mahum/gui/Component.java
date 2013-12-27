@@ -77,11 +77,17 @@ public abstract class Component extends AbstractComponent{
     @Override
     public void mousePressed(int button, int x, int y) {
         if(this.zone.contains(x, y)){
-            this.setFocus(true);
-            this.gainFocus();
+            System.out.println("Gained " + zone.getX());
+            if(!this.hasFocus()){
+                this.setFocus(true);
+                this.gainFocus();
+            }
         } else {
-            this.setFocus(false);
-            this.lostFocus();
+            if(this.hasFocus()){
+                System.out.println(zone);
+                this.setFocus(false);
+                this.lostFocus();
+            }
         }
     }
 

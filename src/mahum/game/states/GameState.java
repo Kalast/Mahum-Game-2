@@ -20,12 +20,13 @@ import mahum.game.Floor;
 import mahum.game.HillPiece;
 import mahum.game.JaugePuissance;
 import mahum.game.PunchingBall;
-import mahum.game.SomeRequest;
-import mahum.game.SomeResponse;
+import mahum.game.net.SomeRequest;
+import mahum.game.net.SomeResponse;
 import mahum.game.TextPanel;
 import mahum.game.Variables;
 import mahum.game.Wall;
 import mahum.game.net.GameClient;
+import mahum.game.net.TickRequest;
 import mahum.gui.ActionPerform;
 import mahum.gui.TextField;
 import org.jbox2d.callbacks.ContactImpulse;
@@ -100,8 +101,6 @@ public class GameState extends BasicGameState{
     public int getID() {
         return ID;
     }
-
-    
     
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -190,9 +189,12 @@ public class GameState extends BasicGameState{
                     SomeResponse response = (SomeResponse) object;
                     System.out.println(response.text);
                     panel.addText(response.text);
+                } else if(object instanceof TickRequest) {
+                    TickRequest response = (TickRequest) object;
+                    System.out.println("TICK SERVER " + response.value);
+                    panel.addText("Le serveur envoie un tick de " + response.value);
                 }
             }
-            
         });
         EventManager.addEvents(container, world, balls, jauge, car, client);
     }
@@ -221,12 +223,10 @@ public class GameState extends BasicGameState{
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        
         world.step(delta / 1000f, 8, 3);
         autoClean();  
     }
-    
-        
+   
      public void autoClean(){
         for(Ball ball : balls){
             if(ball.getPositionGame().y > 768 || ball.getPositionGame().y < -10){

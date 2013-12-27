@@ -17,8 +17,6 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mahum.game.states.GameState;
-import mahum.game.SomeRequest;
-import mahum.game.SomeResponse;
 
 /**
  *
@@ -27,13 +25,16 @@ import mahum.game.SomeResponse;
 
 public class GameServeur extends Server{
     private boolean started;
+    private TickRequest tickRequest;
     
     public GameServeur() {
         super();
+        tickRequest = new TickRequest();
         started = false;
         Kryo kryo = this.getKryo();
         kryo.register(SomeRequest.class);
         kryo.register(SomeResponse.class);
+        kryo.register(TickRequest.class);
         this.start();
         try {
             this.bind(6900, 6901);
@@ -46,7 +47,13 @@ public class GameServeur extends Server{
     public boolean isStarted() {
         return started;
     }
-    
-    
-    
+
+    public void majTick(int delta){
+        this.tickRequest.value += delta;
+        
+    }    
+
+    public TickRequest getTickRequest() {
+        return tickRequest;
+    }
 }

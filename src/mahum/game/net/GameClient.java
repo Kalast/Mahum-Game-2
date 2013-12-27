@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mahum.game.states.GameState;
-import mahum.game.SomeRequest;
-import mahum.game.SomeResponse;
 
 /**
  *
@@ -23,17 +21,20 @@ import mahum.game.SomeResponse;
  */
 public class GameClient extends Client{
     
+    private long tickServer;
+    
     public GameClient(){
         super();
         Kryo kryo = this.getKryo();
         kryo.register(SomeRequest.class);
         kryo.register(SomeResponse.class);
+        kryo.register(TickRequest.class);
         this.start();
     }
     
     public boolean connect(String address, int portTCP, int portUDP){
         try {
-            this.connect(5000, address, portTCP, portUDP);
+            this.connect(5000, address, portTCP);
             SomeRequest request = new SomeRequest();
             request.text = "Client : Je t'envoie une requête !";
             this.sendTCP(request);
@@ -43,5 +44,9 @@ public class GameClient extends Client{
         }   
         
         return false;
+    }
+    
+    public void setTickServer(long value){
+        this.tickServer = value;
     }
 }

@@ -54,14 +54,13 @@ public class ListItem extends Component{
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
         System.out.println(name + " : " + this.hasFocus());
-        if(this.hasFocus()){
-            this.action.perform();
-        }
+        
     }
     
     @Override
     protected void gainFocus() {
         System.out.println(this.name + " gain focus");
+        this.background = new Color(0,255,0,0.4f);
     }
 
     @Override

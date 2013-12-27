@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package mahum.game;
+package mahum.game.net;
 
 /**
  *

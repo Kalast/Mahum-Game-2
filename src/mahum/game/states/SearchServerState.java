@@ -35,7 +35,6 @@ public class SearchServerState extends BasicGameState{
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        container.getGraphics().setAntiAlias(true);
         loading = new Animation(new SpriteSheet("images/loading.png", 102, 102),50);
         loading.setLooping(true);
     }
@@ -43,6 +42,7 @@ public class SearchServerState extends BasicGameState{
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         loading.start();
+        game.addState(new GameState());
     }
 
     @Override

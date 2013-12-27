@@ -7,6 +7,7 @@
 package mahum.gui;
 
 import java.util.ArrayList;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -32,7 +33,6 @@ public class List extends Container{
 
     @Override
     protected void gainFocus() {
-        
     }
 
     @Override

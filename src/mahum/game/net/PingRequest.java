@@ -4,17 +4,12 @@
  * and open the template in the editor.
  */
 
-package mahum.game;
+package mahum.game.net;
 
 /**
  *
  * @author Kalast
  */
-public class SomeRequest {
-
-    public String text;
-
-    public SomeRequest() {
-
-    }
+public class PingRequest {
+    public long tick;
 }

@@ -6,6 +6,7 @@
 
 package mahum.game;
 
+import mahum.game.net.SomeRequest;
 import mahum.game.net.GameServeur;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
