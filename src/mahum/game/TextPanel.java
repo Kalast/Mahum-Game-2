@@ -6,6 +6,7 @@
 
 package mahum.game;
 
+import mahum.gui.Scroller;
 import mahum.game.states.GameState;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -27,9 +28,11 @@ public class TextPanel {
     private int padding;
     private int lineHeight;
     private Scroller scroller;
+    private GUIContext context;
 
     public TextPanel(GUIContext context, Rectangle zone) {
         this.zone = zone;
+        this.context = context;
         this.lines = new CopyOnWriteArrayList<>();
         this.padding = 5;
         this.lineHeight = 20;
@@ -78,12 +81,13 @@ public class TextPanel {
             i ++;
         }
         
-        g.setClip(0, 0, Variables.WIDTH_SCREEN, Variables.HEIGHT_SCREEN);
+        g.clearClip();
         try {
-            this.scroller.render(GameState.container, g);
+            this.scroller.render(context, g);
         } catch (SlickException ex) {
             Logger.getLogger(TextPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+  
         g.setColor(c);
     }
 

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mahum.game.states.GameState;
+import org.jbox2d.common.Vec2;
 
 /**
  *
@@ -29,6 +30,8 @@ public class GameClient extends Client{
         kryo.register(SomeRequest.class);
         kryo.register(SomeResponse.class);
         kryo.register(TickRequest.class);
+        kryo.register(LancerBallRequest.class);
+        kryo.register(Vec2.class);
         this.start();
     }
     

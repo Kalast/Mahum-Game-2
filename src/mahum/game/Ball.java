@@ -68,8 +68,8 @@ public class Ball {
         BodyDef def = new BodyDef();
         def.position = new Vec2(x, y);
         def.type = type;
+        while(world.isLocked());
         body = world.createBody(def);
-        
         CircleShape cs = new CircleShape();
         cs.m_radius = this.radius / Constants.SCALE_PHYSICS;
         FixtureDef fd = new FixtureDef();

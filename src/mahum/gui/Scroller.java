@@ -4,11 +4,13 @@
  * and open the template in the editor.
  */
 
-package mahum.game;
+package mahum.gui;
 
 import mahum.game.states.GameState;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mahum.game.SimpleButton;
+import mahum.game.Variables;
 import mahum.gui.ConstraintAxisMovement;
 import mahum.gui.ConstraintMovement;
 import org.lwjgl.input.Cursor;

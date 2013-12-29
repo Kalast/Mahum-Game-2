@@ -12,6 +12,7 @@ import mahum.game.net.SomeRequest;
 import mahum.game.net.SomeResponse;
 import mahum.game.TextPanel;
 import mahum.game.net.GameServeur;
+import mahum.game.net.LancerBallRequest;
 import mahum.gui.ActionButton;
 import mahum.gui.ActionPerform;
 import org.newdawn.slick.GameContainer;
@@ -68,6 +69,9 @@ public class ServeurState extends BasicGameState{
                                   SomeResponse response = new SomeResponse();
                                   response.text = "Server : J'ai bien reçu ta requête !";
                                   connection.sendTCP(response);
+                               } else if (object instanceof LancerBallRequest) {
+                                  LancerBallRequest request = (LancerBallRequest)object;
+                                  serveur.sendToAllExceptTCP(connection.getID(), request);
                                }
                             }
 
@@ -83,8 +87,9 @@ public class ServeurState extends BasicGameState{
 
                             @Override
                             public void connected(Connection connection) {
+                                panel.addText("Envoi du Tick : " + serveur.getTickRequest().value);
                                 connection.sendTCP(serveur.getTickRequest());
-                                panel.addText(connection.getID() + " s'est connecté ..");
+                                panel.addText(connection + " s'est connecté ..");
                             }
                          });
                     }

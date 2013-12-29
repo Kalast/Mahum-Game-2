@@ -15,7 +15,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import mahum.game.Ball;
 import mahum.game.Box;
 import mahum.game.Car;
-import mahum.game.EventManager;
 import mahum.game.Floor;
 import mahum.game.HillPiece;
 import mahum.game.JaugePuissance;
@@ -23,9 +22,11 @@ import mahum.game.PunchingBall;
 import mahum.game.net.SomeRequest;
 import mahum.game.net.SomeResponse;
 import mahum.game.TextPanel;
+import mahum.game.ThreadGame;
 import mahum.game.Variables;
 import mahum.game.Wall;
 import mahum.game.net.GameClient;
+import mahum.game.net.LancerBallRequest;
 import mahum.game.net.TickRequest;
 import mahum.gui.ActionPerform;
 import mahum.gui.TextField;
@@ -63,6 +64,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
@@ -75,44 +77,41 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class GameState extends BasicGameState{
     public static final int ID = 3; 
-    public static GameContainer container; 
     private World world;
-    private float av = 0;
-    private Wall wall;
     private CopyOnWriteArrayList<Ball> balls;
     public static TextPanel panel;
     private JaugePuissance jauge;
     private ArrayList<Floor> floors;
+    private mahum.game.Character chara;
     
-    private GameClient client;
+    public static GameClient client;
     
     private PunchingBall punchingBall;
     private PunchingBall punchingBall2;
-    
-    private long time;
-    
+
     private Box box = new Box(0,0,800,600);
     private Box box2 = new Box(500,200,200,200);
     Car car = new Car(50,50);
     private TextField field;
     HillPiece hill = new HillPiece(700,300,100,0,20);
-    
+
+    public GameState() {
+        GameState.client = new GameClient();
+    }
+
     @Override
     public int getID() {
         return ID;
     }
     
     @Override
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {
+    public void init(GameContainer container, final StateBasedGame game) throws SlickException {
         System.out.println("INIT GAMESTATE");
-        GameState.container = container;
-        time = System.currentTimeMillis();
+        System.out.println("Attribution du client");
+        chara = new mahum.game.Character("images/char.png");
         balls = new CopyOnWriteArrayList();
         floors = new ArrayList();
         jauge = new JaugePuissance(3);
-        punchingBall = new PunchingBall(600, 300, 2, 30);
-        punchingBall2 = new PunchingBall(670, 300, 2, 30);
-        
         Vec2 gravity = new Vec2(0, 9.8f);
         world = new World(gravity);
         world.setAllowSleep(true);
@@ -146,31 +145,111 @@ public class GameState extends BasicGameState{
                 
             }
         };
-    }
-
-    public void setClient(GameClient client) {
-        this.client = client;
-    }
-    
-    @Override
-    public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
-        field = new TextField(container);
-        box.create(world);
-        box2.create(world);
-        //car.create(world, 0, 0);
-        hill.create(world);
-        this.field.setLocation(0, 500);
-        this.field.setAction(new ActionPerform() {
+        
+        panel = new TextPanel(container, new Rectangle(0, 300, 500, 300));
+        container.getInput().addKeyListener(new KeyListener() {
 
             @Override
-            public void perform() {
-                SomeRequest request = new SomeRequest();
-                request.text = field.getText().toString();
-                client.sendTCP(request);
-                field.clearText();
+            public void keyPressed(int key, char c) {
+                if(key == Input.KEY_SPACE){
+                    System.out.println("JUMP");
+                    chara.jump();
+                }
+                
+                if(key == Input.KEY_D){
+                    chara.moveRight();
+                }
+                
+                if(key == Input.KEY_Q){
+                    chara.moveLeft();
+                }
+            }
+
+            @Override
+            public void keyReleased(int key, char c) {
+            }
+
+            @Override
+            public void setInput(Input input) {
+            }
+
+            @Override
+            public boolean isAcceptingInput() {
+                return true;
+            }
+
+            @Override
+            public void inputEnded() {
+            }
+
+            @Override
+            public void inputStarted() {
             }
         });
-        panel = new TextPanel(container, new Rectangle(0, 300, 500, 300));
+        container.getInput().addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseWheelMoved(int change) {
+            }
+
+            @Override
+            public void mouseClicked(int button, int x, int y, int clickCount) {
+            }
+
+            @Override
+            public void mousePressed(int button, int x, int y) {
+                balls.add(new Ball(10));
+                balls.get(balls.size()-1).create(world, x, y);
+                balls.get(balls.size()-1).stopMovement();
+                jauge.setStart(x, y);
+                jauge.setEnd(x, y);
+                jauge.setActive(true);
+            }
+
+            @Override
+            public void mouseReleased(int button, int x, int y) {
+                jauge.setActive(false);
+                balls.get(balls.size()-1).resetMovement();
+                balls.get(balls.size()-1).getBody().applyForceToCenter(jauge.getVector());
+                LancerBallRequest rq = new LancerBallRequest();
+                rq.force = jauge.getVector();
+                rq.position = balls.get(balls.size()-1).getPositionGame();
+                client.sendTCP(rq);
+                //car.resetMovement();
+            }
+
+            @Override
+            public void mouseMoved(int oldx, int oldy, int newx, int newy) {
+                /*balls.add(new Ball(20));
+                balls.get(balls.size()-1).create(world, newx, newy);*/
+                      
+            }
+
+            @Override
+            public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+                //balls.get(balls.size()-1).setLocation(newx, newy);
+                jauge.setEnd(newx, newy);
+                /*car.stopMovement();
+                car.setLocation(newx, newy);*/
+            }
+
+            @Override
+            public void setInput(Input input) {
+            }
+
+            @Override
+            public boolean isAcceptingInput() {
+                return true;
+            }
+
+            @Override
+            public void inputEnded() {
+            }
+
+            @Override
+            public void inputStarted() {
+            }
+        });
         client.addListener(new Listener(){
 
             @Override
@@ -187,16 +266,47 @@ public class GameState extends BasicGameState{
             public void received(Connection connection, Object object) {
                 if (object instanceof SomeResponse) {
                     SomeResponse response = (SomeResponse) object;
-                    System.out.println(response.text);
                     panel.addText(response.text);
                 } else if(object instanceof TickRequest) {
                     TickRequest response = (TickRequest) object;
-                    System.out.println("TICK SERVER " + response.value);
-                    panel.addText("Le serveur envoie un tick de " + response.value);
+                    panel.addText("Tick server de " + response.value);
+                    client.setTickServer(response.value);
+                } else if(object instanceof LancerBallRequest) {
+                    LancerBallRequest request = (LancerBallRequest) object;
+                    Ball ball = new Ball(10);
+                    ball.create(world, request.position.x, request.position.y);
+                    ball.resetMovement();
+                    ball.getBody().applyForceToCenter(request.force);
+                    balls.add(ball);
                 }
             }
         });
-        EventManager.addEvents(container, world, balls, jauge, car, client);
+    }
+    
+    @Override
+    public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
+        
+        punchingBall = new PunchingBall(600, 300, 2, 30);
+        punchingBall2 = new PunchingBall(670, 300, 2, 30);     
+        
+        box.create(world);
+        box2.create(world);
+        //car.create(world, 0, 0);
+        hill.create(world);
+        System.out.println("Création du listener du client " + client);
+        chara.create(world, 200, 100);
+        field = new TextField(container);
+        this.field.setLocation(0, 500);
+        this.field.setAction(new ActionPerform() {
+
+            @Override
+            public void perform() {
+                SomeRequest request = new SomeRequest();
+                request.text = field.getText().toString();
+                client.sendTCP(request);
+                field.clearText();
+            }
+        });
     }
 
     @Override
@@ -219,12 +329,16 @@ public class GameState extends BasicGameState{
         this.jauge.render(g);
         panel.render(g);
         field.render(container, g);
+        chara.render(g);
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        if(!this.client.isConnected()){
+            game.enterState(SearchServerState.ID);
+        }
         world.step(delta / 1000f, 8, 3);
-        autoClean();  
+        autoClean();
     }
    
      public void autoClean(){

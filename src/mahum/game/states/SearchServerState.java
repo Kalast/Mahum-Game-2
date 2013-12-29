@@ -7,7 +7,10 @@
 package mahum.game.states;
 
 import com.esotericsoftware.kryonet.Client;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mahum.game.net.GameClient;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -27,22 +30,36 @@ public class SearchServerState extends BasicGameState{
     private String message;
     private float centerX;
     private long time = 0;
-
+    private Thread t;
+    private InetAddress address;
     @Override
     public int getID() {
         return ID;
     }
 
     @Override
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {
+    public void init(GameContainer container, final StateBasedGame game) throws SlickException {
         loading = new Animation(new SpriteSheet("images/loading.png", 102, 102),50);
         loading.setLooping(true);
     }
 
     @Override
-    public void enter(GameContainer container, StateBasedGame game) throws SlickException {
+    public void enter(GameContainer container, final StateBasedGame game) throws SlickException {
         loading.start();
-        game.addState(new GameState());
+        t = new Thread(new Runnable() {
+                private boolean discover = false;
+            
+                @Override
+                public void run() {
+                    while(!discover){
+                        address = GameState.client.discoverHost(6901, 1000);
+                        if(address != null){
+                            discover = true;
+                        }
+                    }
+                }
+            });
+        t.start();
     }
 
     @Override
@@ -53,23 +70,16 @@ public class SearchServerState extends BasicGameState{
 
     @Override
     public void update(GameContainer container, final StateBasedGame game, int delta) throws SlickException {
-        if(System.currentTimeMillis() - time >= 1000){
-            time = System.currentTimeMillis();
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    GameClient c = new GameClient();
-                    InetAddress address = c.discoverHost(6901, 5000);
-                    if(address != null){
-                        if(c.connect(address.getHostAddress(), 6900, 6901)){
-                            ((mahum.game.states.GameState)game.getState(GameState.ID)).setClient(c);
-                            game.enterState(GameState.ID);
-                        }
-                    }
-                }
-            }).start();
-        } 
+        if (address != null) {
+            try {
+               GameState.client.connect(5000, address, 6900, 6901);
+                
+            } catch (IOException ex) {
+                System.out.println("Impossible de se connecter au serveur pour le moment !");
+            }
+            
+            game.enterState(mahum.game.states.GameState.ID);
+       }
     }
     
 }
